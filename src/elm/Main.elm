@@ -89,7 +89,7 @@ power_down : Model -> Model
 power_down model =
   let
     new_model =
-      { model | powerups = model.powerups - 1, isAfterTrainingStarted = False }
+      { model | powerups = model.powerups - 1 }
   in
     if new_model.powerups == 0 then
       { new_model | powerups = 1 }
@@ -131,10 +131,10 @@ update msg model =
       save_model { model | isTrainingStarted = False, isAfterTrainingStarted = True }
 
     PowerUp ->
-      save_model { model | powerups = model.powerups + 1, isAfterTrainingStarted = False }
+      update DayCompleted { model | powerups = model.powerups + 1 }
 
     PowerDown ->
-      save_model (power_down model)
+      update DayCompleted (power_down model)
 
     TrainingWasSuccessful ->
       save_model { model
